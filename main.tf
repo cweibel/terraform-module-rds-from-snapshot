@@ -5,6 +5,7 @@ variable resource_tags              {} # AWS tags to apply to resources         
 variable rds_security_group_id      {} # RDS Security Group                                      (required)
 variable kms_rds_key_by_arn_arn     {} # KMS key to encrypt the db with                          (required)
 variable rds_db_subnet_group_name   {} # RDS Subnet group name                                   (required)
+variable rds_snapshot_id            {} # RDS Snapshot ID                                         (required)
 
 variable allocated_storage          { default = 20 }
 variable max_allocated_storage      { default = 100 }
