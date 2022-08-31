@@ -12,24 +12,7 @@ variable max_allocated_storage      { default = 100 }
 variable engine_version             { default = "14.1" }
 variable instance_class             { default = "db.m5.large" }
 
-################################################################################
-# DB randomized creds
-################################################################################
-# Create Randomized User/Pass for the RDS instance
-# NOTE: First character must be a letter
-################################################################################
-resource "random_string" "master-db-user-name" {
-  length = 16
-  special = false
-}
-resource "random_string" "master-db-password" {
-  length = 32
-  special = false
-  min_special = 0
-  min_upper = 5
-  min_numeric = 5
-  min_lower = 5
-}
+
 
 ################################################################################
 # RDS Postgres 
@@ -43,8 +26,6 @@ resource "aws_db_instance" "rds-db-instance" {
   instance_class             = var.instance_class
   identifier_prefix          = "${var.rds_instance_name}-"
   db_name                    = "master"
-  username                   = "u${random_string.master-db-user-name.result}"
-  password                   = "p${random_string.master-db-password.result}"
   db_subnet_group_name       = var.rds_db_subnet_group_name
   vpc_security_group_ids     = ["${var.rds_security_group_id}"]
   auto_minor_version_upgrade = true #Required by Sentinel
@@ -59,7 +40,7 @@ resource "aws_db_instance" "rds-db-instance" {
   
   
   # Snapshot configuration
-  backup_window = "10:00 - 11:00"
+  backup_window = "10:00-11:00"
 
   # Copy tags to backup snapshots and retain backups even after the instance has been deleted.
   copy_tags_to_snapshot     = true
@@ -73,7 +54,5 @@ resource "aws_db_instance" "rds-db-instance" {
 ################################################################################
 # Output creds for storing in Vault
 ################################################################################
-output "rds_db_instance_dbuser" {value = random_string.master-db-user-name.result }
-output "rds_db_instance_dbpass" {value = random_string.master-db-password.result }
 output "rds_db_instance_dbhost" {value = aws_db_instance.rds-db-instance.address }
 
