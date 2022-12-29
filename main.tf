@@ -40,7 +40,7 @@ resource "aws_db_instance" "rds-db-instance" {
   
   
   # Snapshot configuration
-  backup_window = "10:00-11:00"
+  backup_window = "04:00-05:00"
 
   # Copy tags to backup snapshots and retain backups even after the instance has been deleted.
   copy_tags_to_snapshot     = true
@@ -55,4 +55,5 @@ resource "aws_db_instance" "rds-db-instance" {
 # Output creds for storing in Vault
 ################################################################################
 output "rds_db_instance_dbhost" {value = aws_db_instance.rds-db-instance.address }
-
+output "rds_db_instance_dbuser" {value = random_string.master-db-user-name.result }
+output "rds_db_instance_dbpass" {value = random_string.master-db-password.result }
