@@ -20,3 +20,5 @@ Inputs - Optional:
 Outputs:
 
 - `rds_db_instance_dbhost` - Host name for the RDS Instance
+- `rds_db_instance_dbuser` - Username suffix for the RDS Instance
+- `rds_db_instance_dbpass` - Password suffix for the RDS Instance
